@@ -42,7 +42,8 @@ public abstract class GenerateContractWrapper
                     getParameters().getContractName().get(),
                     "--addressLength",
                     String.valueOf(getParameters().getAddressLength().get()),
-                    typesFlag
+                    typesFlag,
+                    "--generateBoth"
                 });
     }
 

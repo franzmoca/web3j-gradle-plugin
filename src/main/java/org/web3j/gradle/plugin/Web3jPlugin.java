@@ -46,7 +46,7 @@ public class Web3jPlugin implements Plugin<Project> {
     public void apply(final Project target) {
         target.getPluginManager().apply(JavaPlugin.class);
         target.getPluginManager().apply(SolidityPlugin.class);
-        target.getDependencies().add("implementation", "org.web3j:core:" + getProjectVersion());
+        target.getDependencies().add("implementation", "org.web3j:core:" + getWeb3jVersion());
         registerExtensions(target);
 
         final SourceSetContainer sourceSets =
@@ -57,6 +57,26 @@ public class Web3jPlugin implements Plugin<Project> {
 
     protected void registerExtensions(Project project) {
         project.getExtensions().create(Web3jExtension.NAME, Web3jExtension.class, project);
+    }
+
+    protected String getWeb3jVersion() {
+        final URL versionPropsFile = getClass().getClassLoader().getResource("version.properties");
+
+        if (versionPropsFile == null) {
+            throw new PluginApplicationException(
+                    Describables.of("No version.properties file found in the classpath."), null);
+        } else {
+            try {
+                final Properties versionProps = new Properties();
+                try (InputStream inStream = versionPropsFile.openStream()) {
+                    versionProps.load(inStream);
+                    return versionProps.getProperty("web3jVersion");
+                }
+            } catch (IOException e) {
+                throw new PluginApplicationException(
+                        Describables.of("Could not read version.properties file."), e);
+            }
+        }
     }
 
     protected String getProjectVersion() {

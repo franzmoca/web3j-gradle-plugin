@@ -95,7 +95,7 @@ task generateVersionProperties {
         def generated = new File(generatedResources, "version.properties")
         generated.text = "version=$rootProject.version"
         //Add web3j version
-        generated.append("web3jVersion=$web3jVersion")
+        generated.text += "\nweb3jVersion=$web3jVersion"
     }
 }
 
